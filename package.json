@@ -1,0 +1,25 @@
+{
+  "name": "bookstoreapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucymutunga/BookStoreAPI.git"
+  },
+  "author": "Lucy_M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucymutunga/BookStoreAPI/issues"
+  },
+  "homepage": "https://github.com/lucymutunga/BookStoreAPI#readme",
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mssql": "^9.1.1"
+  }
+}
