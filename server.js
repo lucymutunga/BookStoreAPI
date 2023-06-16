@@ -12,7 +12,7 @@ app.get('/',(req,res)=>{
    res.send('Ok')
 })
 app.use(router)
-const port = process .env.PORT || 4000;
+const port = process .env.PORT || 4040;
 
 
 app.listen(port, ()=>console.log(`Server running on port ${port}`))
