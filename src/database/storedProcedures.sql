@@ -98,10 +98,10 @@ EXEC library.ReturnBook @MemberName = 'John Smith', @BookTitle = 'The Great Gats
 
 -- Listing all members who have borrowed books
 
-CREATE PROCEDURE library.MembersWithBooks
+CREATE OR ALTER PROCEDURE library.MembersWithBooks
 AS
 BEGIN
-    SELECT DISTINCT M.MemberID, M.Name
+    SELECT M.MemberID, M.Name, B.Title
     FROM library.Members M
     INNER JOIN library.Loans L ON M.MemberID = L.MemberID
     INNER JOIN library.Books B ON L.BookID = B.BookID
