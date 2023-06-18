@@ -53,6 +53,8 @@ async function borrowBooks(req, res) {
   }
 }
 
+// returnBooks function
+
 async function returnBooks(req, res) {
   let { MemberName, BookTitle } = req.body;
 
@@ -109,4 +111,37 @@ async function returnBooks(req, res) {
   }
 }
 
-module.exports = { getAllLoans, borrowBooks, returnBooks };
+//\list of members who have borrwed a book
+
+async function membersWithBooks(req, res) {
+  try {
+    let sql = await mssql.connect(config);
+    if (sql.connected) {
+      let checkLoans = await sql
+        .request()
+        .query("SELECT COUNT(*) AS LoanCount FROM library.Loans");
+      const loanCount = checkLoans.recordset[0].LoanCount;
+
+      if (loanCount > 0) {
+        let listOfMembers = await sql
+          .request()
+          .execute("library.membersWithBooks");
+        res.status(200).json({
+          success: true,
+          message: "The following list of members have books",
+          members: listOfMembers.recordsets[0],
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: "No members currently have our books.",
+          members: [],
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { getAllLoans, borrowBooks, returnBooks, membersWithBooks };

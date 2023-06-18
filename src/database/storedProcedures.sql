@@ -94,3 +94,18 @@ BEGIN
   WHERE B.BookID = @BookID;
 END;
 EXEC library.ReturnBook @MemberName = 'John Smith', @BookTitle = 'The Great Gatsby';
+
+
+-- Listing all members who have borrowed books
+
+CREATE PROCEDURE library.MembersWithBooks
+AS
+BEGIN
+    SELECT DISTINCT M.MemberID, M.Name
+    FROM library.Members M
+    INNER JOIN library.Loans L ON M.MemberID = L.MemberID
+    INNER JOIN library.Books B ON L.BookID = B.BookID
+    ORDER BY M.MemberID;
+END;
+
+Exec library.MembersWithBooks
