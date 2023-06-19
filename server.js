@@ -13,6 +13,9 @@ app.use( '/books',booksrouter);
 app.use('/loans', loansrouter)
 
 
+const membersrouter =require('./src/routes/membersRoutes.js');
+//const { user } = require('./src/config/config.js');
+
 
 
 
