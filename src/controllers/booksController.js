@@ -37,12 +37,12 @@ async function getBookById(req, res) {
 }
 //creating a book
 async function createBook(req, res) {
-  let { BookID, Title, Author, PublicationYear, Status } = req.body;
+  let { Title, Author, PublicationYear, Status } = req.body;
   console.log(req.body);
   let sql = await mssql.connect(config);
   if (sql.connected) {
     let results = await sql.query(
-      `INSERT INTO library.Books (BookID, Title, Author, PublicationYear, Status) VALUES ('${BookID}','${Title}', '${Author}','${PublicationYear}', '${Status}' )`
+      `INSERT INTO library.Books ( Title, Author, PublicationYear, Status) VALUES ('${Title}', '${Author}','${PublicationYear}', '${Status}' )`
     );
     res.json({
       success: true,
