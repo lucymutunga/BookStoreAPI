@@ -1,7 +1,8 @@
 const express = require("express");
 const mssql = require("mssql");
 const config = require("../config/config");
-
+const { newBorrowValidator } = require("../validators/borrowBookValidators");
+const { newReturnValidator } = require("../validators/returnBookValidation");
 async function getAllLoans(req, res) {
   let sql = await mssql.connect(config);
   if (sql.connected) {
@@ -16,10 +17,14 @@ async function getAllLoans(req, res) {
 //Borrowing Books Method
 
 async function borrowBooks(req, res) {
-  let { MemberName, BookTitle } = req.body;
+  let borrow = req.body;
+  let { MemberName, BookTitle } = borrow;
 
   try {
+    let { value } = newBorrowValidator(borrow);
+    console.log(value);
     let sql = await mssql.connect(config);
+
     if (sql.connected) {
       let memberCheck = await sql
         .request()
@@ -46,19 +51,26 @@ async function borrowBooks(req, res) {
       }
     }
   } catch (error) {
-    console.error("Error:", error);
+    // console.error("Error:", error);
     res
       .status(500)
-      .json({ error: "An error occurred while borrowing the book." });
+      // .json({
+      //   Message: "An error occurred while borrowing the book.",
+      //   error: error.message,
+      // });
+      .send(error.message);
   }
 }
 
 // returnBooks function
 
 async function returnBooks(req, res) {
-  let { MemberName, BookTitle } = req.body;
+  let my_return = req.body;
+  let { MemberName, BookTitle } = my_return;
 
   try {
+    let { value } = newReturnValidator(my_return);
+    console.log(value);
     let sql = await mssql.connect(config);
     if (sql.connected) {
       // Check if the person is a member of the library
@@ -104,10 +116,9 @@ async function returnBooks(req, res) {
       }
     }
   } catch (error) {
-    console.error("Error:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while returning the book." });
+    // console.error("Error:", error);
+    res.status(500).send({ error: error.message });
+    // .json({ error: "An error occurred while returning the book." });
   }
 }
 
