@@ -1,11 +1,11 @@
  const express = require('express');
 
- const router = express.Router();
+ const membersrouter = express.Router();
 const {getmembers,getMemberById,createMember} = require('../controllers/membercontroller');
 
 
-  router.get('/members', getmembers);
-router.get('/members/:MemberID', getMemberById);
-router.post('/members', createMember);
+membersrouter.get('/', getmembers);
+membersrouter.get('/:MemberID', getMemberById);
+membersrouter.post('/', createMember);
 
- module.exports = router;
+ module.exports = membersrouter;
