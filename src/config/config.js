@@ -14,5 +14,4 @@ const config = {
     trustServerCertificate: true, // change to true for local dev / self-signed certs
   },
 };
-
 module.exports = config;

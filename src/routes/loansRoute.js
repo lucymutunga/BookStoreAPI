@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const loansrouter = express.Router();
 const {
   getAllLoans,
   borrowBooks,
@@ -7,9 +7,9 @@ const {
   membersWithBooks,
 } = require("../controllers/loansControllers");
 
-router.get("/loans", getAllLoans);
+router.get("/", getAllLoans);
 router.post("/borrow", borrowBooks);
 router.post("/return", returnBooks);
 router.get("/loans/members", membersWithBooks);
 
-module.exports = router;
+module.exports = loansrouter;

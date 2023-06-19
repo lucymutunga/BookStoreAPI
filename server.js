@@ -1,10 +1,20 @@
 const express = require("express");
 require("dotenv").config();
+const booksrouter = require("./src/routes/booksRoute");
+const loansrouter = require("./src/routes/loansRoute");
 const app = express();
-const bodyParser = require("body-parser");
-const router = require("./src/routes/loansRoute");
-const port = process.env.PORT || 3030;
+
 app.use(express.json());
-app.use(router);
-app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+app.use( '/books',booksrouter);
+app.use('/loans', loansrouter)
+
+
+
+
+
+app.use(loansrouter);
 app.listen(port, () => console.log(`Server running on port ${port}`));
