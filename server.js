@@ -18,5 +18,5 @@ app.use("/members", membersrouter);
 
 const port = process.env.PORT || 3030;
 
-app.use(loansrouter);
+// app.use(loansrouter);
 app.listen(port, () => console.log(`Server running on port ${port}`));
