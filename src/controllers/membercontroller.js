@@ -87,6 +87,9 @@ async function createMember(req, res) {
 }
 
 async function memberLogin(req, res) {
+  try {
+    
+  
   let { MemberID, Password } = req.body;
   let value  = memberLoginValidator(req.body);
     console.log(value)
@@ -109,7 +112,11 @@ async function memberLogin(req, res) {
     }
   } catch (error) {
     console.log(error)
+    
   }
+} catch (error) {
+    
+}
 }
 
 //creating a member

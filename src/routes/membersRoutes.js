@@ -5,7 +5,7 @@ const {
   getmembers,
   getMemberById,
   createMember,
-  memberLogin,
+  memberLogin
 } = require("../controllers/membercontroller");
 
 membersrouter.get("/", getmembers);
