@@ -7,10 +7,11 @@ const {
   createMember,
   memberLogin,
 } = require("../controllers/membercontroller");
+const newMemberMiddleware = require("../Middlewares/newMemberMiddleware");
 
 membersrouter.get("/", getmembers);
 membersrouter.get("/:MemberID", getMemberById);
-membersrouter.post("/", createMember);
+membersrouter.post("/",newMemberMiddleware,createMember);
 membersrouter.post("/login", memberLogin);
 
 module.exports = membersrouter;

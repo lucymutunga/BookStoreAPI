@@ -47,7 +47,8 @@ async function createMember(req, res) {
     
   
   let create_member = req.body;
-    let value  = createMemberValidator(create_member);
+    // let value  = createMemberValidator(create_member);
+    let value = req;
     console.log(value)
   let { Name, Address, ContactNumber, Password } = create_member;
   let sql = await mssql.connect(config);
