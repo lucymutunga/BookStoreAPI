@@ -2,22 +2,6 @@ const mssql = require("mssql");
 const config = require("../config/config");
 const { tokenVerifier } = require("../utils/tokens");
 const { createBookValidator } = require("../validators/createBookValidation");
-// fetching all books
-async function getAllBooks(req, res) {
-  let sql = await mssql.connect(config);
-  if (sql.connected) {
-    let results = await sql.query(`SELECT * from library.Books`);
-    let books = results.recordset;
-    res.json({
-      success: true,
-      message: "Here are the books",
-      results: books,
-    });
-  } else {
-    res.status(500).send("internal server error");
-  }
-}
-
 //fetching a single book
 async function getBookById(req, res) {
   let { book_id } = req.params;
