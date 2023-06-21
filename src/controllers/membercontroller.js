@@ -102,10 +102,10 @@ async function memberLogin(req, res) {
         console.log(token);
         res.json({ success: true, message: "Logged in Successfully", token });
       } else {
-        res.status(401).json({ success: false, message: "Wrong credentials" });
+        res.status(401).json({ success: false, message: "Wrong credentials: Please recheck your details and try again" });
       }
     } else {
-      res.status(401).json({ success: false, Message: "No user found" });
+      res.status(401).json({ success: false, Message: "No user found: Create an account first" });
     }
   } catch (error) {
     console.log(error)
