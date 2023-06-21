@@ -47,7 +47,8 @@ async function createMember(req, res) {
     
   
   let create_member = req.body;
-    let value  = createMemberValidator(create_member);
+    // let value  = createMemberValidator(create_member);
+    let value = req;
     console.log(value)
   let { Name, Address, ContactNumber, Password } = create_member;
   let sql = await mssql.connect(config);
@@ -102,10 +103,10 @@ async function memberLogin(req, res) {
         console.log(token);
         res.json({ success: true, message: "Logged in Successfully", token });
       } else {
-        res.status(401).json({ success: false, message: "Wrong credentials" });
+        res.status(401).json({ success: false, message: "Wrong credentials: Please recheck your details and try again" });
       }
     } else {
-      res.status(401).json({ success: false, Message: "No user found" });
+      res.status(401).json({ success: false, Message: "No user found: Create an account first" });
     }
   } catch (error) {
     console.log(error)

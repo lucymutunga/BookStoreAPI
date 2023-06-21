@@ -1,0 +1,17 @@
+const { createMemberValidator } = require("../validators/createMemberValidation");
+
+//Validates the schema
+function newMemberMiddleware(req,res,next){
+    let member = req.body;
+try{
+    let {value} = createMemberValidator(member)
+    req.value = value;
+    next()
+}catch(error){
+    next({  
+        status:400,
+        message:error.message
+    })
+}
+}
+module.exports=newMemberMiddleware;

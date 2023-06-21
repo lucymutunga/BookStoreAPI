@@ -6,10 +6,12 @@ const { newReturnValidator } = require("../validators/returnBookValidation");
 async function getAllLoans(req, res) {
   let sql = await mssql.connect(config);
   if (sql.connected) {
-    let results = await sql.query("SELECT * FROM library.Books");
+    let results = await sql.query("SELECT * FROM library.Loans");
     let loans = results.recordset;
     res.json({
-      products: loans,
+      success: true,
+      message: "Here are the books loaned",
+      BooksLoaned: loans,
     });
   }
 }

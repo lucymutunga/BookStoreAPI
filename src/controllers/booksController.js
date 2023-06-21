@@ -1,6 +1,5 @@
 const mssql = require("mssql");
 const config = require("../config/config");
-const { tokenVerifier } = require("../utils/tokens");
 const { createBookValidator } = require("../validators/createBookValidation");
 //fetching a single book
 async function getBookById(req, res) {
@@ -50,12 +49,10 @@ async function createBook(req, res) {
 }
 //Authorization
  async function getAllBooks(req, res){
-  let token = req.headers['authorization'].split(" ")[1]
-    try {
-      let member = await tokenVerifier(token);
-    
-      if (member.roles === "admin") {
-        let sql = await mssql.connect(config);
+ try {
+      let member = req.member;
+      console.log(member);
+       let sql = await mssql.connect(config);
         if (sql.connected) {
         let results = await sql.query(`SELECT * from library.Books`);
         let books = results.recordset;
@@ -67,14 +64,9 @@ async function createBook(req, res) {
       }else{
         res.status(500).send("internal server error")
       }
-    }else{
-      res.status(403).json({
-        success:false,
-        message:"You are not authorized to view this page"
-      })
-    }
+
     } catch (error) {
- console.log(error.message);
+      console.log(error.message);
       if(error.message.includes('token')||error.message.includes('invalid')){
         res.status(403).json({
           success:false,
@@ -83,8 +75,8 @@ async function createBook(req, res) {
       }
     }
   }
-
-
+  
+  
 module.exports = { getAllBooks, getBookById, createBook };
 
 
