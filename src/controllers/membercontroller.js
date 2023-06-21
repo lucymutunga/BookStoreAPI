@@ -4,6 +4,8 @@ const { createMemberValidator } = require("../validators/createMemberValidation"
 const { memberLoginValidator } = require("../validators/memberLoginValidator");
 
 const bcrypt = require("bcrypt");
+const getAMember = require("../utils/getAMember.js");
+const { tokenGenerator } = require("../utils/tokens.js");
 async function getmembers(req, res) {
   let sql = await mssql.connect(config);
 
@@ -89,32 +91,27 @@ async function memberLogin(req, res) {
   let value  = memberLoginValidator(req.body);
     console.log(value)
   try {
-    let sql = await mssql.connect(config);
-    if (sql.connected) {
-      let results = await sql
-        .request()
-        .input("MemberID", MemberID)
-        .execute("library.GetMemberById");
-      let member = results.recordset[0];
-      if (member) {
-        let password_match = await bcrypt.compare(Password, member.Password);
-        password_match
-          ? res.json({ success: true, message: "Logged in Successfully" })
-          : res
-              .status(401)
-              .json({ success: false, message: "Wrong credentials" });
+    let member = await getAMember(MemberID);
+    if (member) {
+      let password_match = await bcrypt.compare(Password, member.Password);
+      if (password_match) {
+        let token = await tokenGenerator({
+          MemberID: member.MemberID,
+          roles: "admin",
+        });
+        console.log(token);
+        res.json({ success: true, message: "Logged in Successfully", token });
       } else {
-        res.status(401).json({ success: false, Message: "No user found" });
+        res.status(401).json({ success: false, message: "Wrong credentials" });
       }
     } else {
-      res
-        .status(500)
-        .json({ success: false, message: "Internal Server Error" });
+      res.status(401).json({ success: false, Message: "No user found" });
     }
   } catch (error) {
     console.log(error)
   }
 }
+
 //creating a member
 // async function createMember(req,res){
 //     let {,Name,Address,ContactNumber Password}=req.body;

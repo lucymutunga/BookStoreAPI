@@ -1,6 +1,6 @@
 const mssql = require("mssql");
 const config = require("../config/config");
-
+const { tokenVerifier } = require("../utils/tokens");
 const { createBookValidator } = require("../validators/createBookValidation");
 // fetching all books
 async function getAllBooks(req, res) {
@@ -17,6 +17,7 @@ async function getAllBooks(req, res) {
     res.status(500).send("internal server error");
   }
 }
+
 //fetching a single book
 async function getBookById(req, res) {
   let { book_id } = req.params;
@@ -63,6 +64,63 @@ async function createBook(req, res) {
     res.send(error.message);
 }
 }
+//Authorization
+ async function getAllBooks(req, res){
+  let token = req.headers['authorization'].split(" ")[1]
+    try {
+      let member = await tokenVerifier(token);
+    
+      if (member.roles === "admin") {
+        let sql = await mssql.connect(config);
+        if (sql.connected) {
+        let results = await sql.query(`SELECT * from library.Books`);
+        let books = results.recordset;
+        res.json({
+          success: true,
+          message: "Here are the books",
+          results: books
+        })
+      }else{
+        res.status(500).send("internal server error")
+      }
+    }else{
+      res.status(403).json({
+        success:false,
+        message:"You are not authorized to view this page"
+      })
+    }
+    } catch (error) {
+ console.log(error.message);
+      if(error.message.includes('token')||error.message.includes('invalid')){
+        res.status(403).json({
+          success:false,
+          message:"try logging in again",
+        })
+      }
+    }
+  }
 
 
 module.exports = { getAllBooks, getBookById, createBook };
+
+
+
+
+
+
+//fetching all books
+// async function getAllBooks(req, res) {
+//   let sql = await mssql.connect(config);
+//   if (sql.connected) {
+//     let results = await sql.query(`SELECT * from library.Books`);
+//     let books = results.recordset;
+//     res.json({
+//       success: true,
+//       message: "Here are the books",
+//       results: books,
+//     });
+//   } else {
+//     res.status(500).send("internal server error");
+//   }
+// }
+//fetching a single book
