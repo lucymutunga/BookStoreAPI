@@ -1,5 +1,8 @@
 const mssql = require("mssql");
 const config = require("../config/config.js");
+const { createMemberValidator } = require("../validators/createMemberValidation");
+const { memberLoginValidator } = require("../validators/memberLoginValidator");
+
 const bcrypt = require("bcrypt");
 async function getmembers(req, res) {
   let sql = await mssql.connect(config);
@@ -38,7 +41,12 @@ async function getMemberById(req, res) {
 }
 //creating a member
 async function createMember(req, res) {
+  try {
+    
+  
   let create_member = req.body;
+    let value  = createMemberValidator(create_member);
+    console.log(value)
   let { Name, Address, ContactNumber, Password } = create_member;
   let sql = await mssql.connect(config);
   let hashed_password = await bcrypt.hash(Password, 8);
@@ -70,10 +78,16 @@ async function createMember(req, res) {
   } else {
     res.status(500).send("Internal server error");
   }
+} catch (error) {
+    res.send(error.message)
+    console.log(error.message)
+}
 }
 
 async function memberLogin(req, res) {
   let { MemberID, Password } = req.body;
+  let value  = memberLoginValidator(req.body);
+    console.log(value)
   try {
     let sql = await mssql.connect(config);
     if (sql.connected) {
@@ -97,7 +111,9 @@ async function memberLogin(req, res) {
         .status(500)
         .json({ success: false, message: "Internal Server Error" });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 }
 //creating a member
 // async function createMember(req,res){

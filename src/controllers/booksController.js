@@ -1,5 +1,7 @@
 const mssql = require("mssql");
 const config = require("../config/config");
+
+const { createBookValidator } = require("../validators/createBookValidation");
 // fetching all books
 async function getAllBooks(req, res) {
   let sql = await mssql.connect(config);
@@ -37,8 +39,13 @@ async function getBookById(req, res) {
 }
 //creating a book
 async function createBook(req, res) {
+  try {
+    
+  
   let { Title, Author, PublicationYear, Status } = req.body;
   console.log(req.body);
+  let value = createBookValidator(req.body);
+  console.log(value);
   let sql = await mssql.connect(config);
   if (sql.connected) {
     let results = await sql.query(
@@ -52,6 +59,10 @@ async function createBook(req, res) {
   } else {
     res.status(500).send("internal server error");
   }
+} catch (error) {
+    res.send(error.message);
 }
+}
+
 
 module.exports = { getAllBooks, getBookById, createBook };
