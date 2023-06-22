@@ -6,10 +6,11 @@ const {
   returnBooks,
   membersWithBooks,
 } = require("../controllers/loansControllers");
-
-loansrouter.get("/", getAllLoans);
-loansrouter.post("/borrow", borrowBooks);
-loansrouter.post("/return", returnBooks);
-loansrouter.get("/loans/members", membersWithBooks);
+const tokenval = require("../Middlewares/tokenval");
+const adminTokenValidation = require("../Middlewares/adminMemberMiddleware");
+loansrouter.get("/", adminTokenValidation, getAllLoans);
+loansrouter.post("/borrow", tokenval, adminTokenValidation, borrowBooks);
+loansrouter.post("/return", tokenval, adminTokenValidation, returnBooks);
+loansrouter.get("/loans/members", adminTokenValidation, membersWithBooks);
 
 module.exports = loansrouter;

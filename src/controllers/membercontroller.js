@@ -1,6 +1,8 @@
 const mssql = require("mssql");
 const config = require("../config/config.js");
-const { createMemberValidator } = require("../validators/createMemberValidation");
+const {
+  createMemberValidator,
+} = require("../validators/createMemberValidation");
 const { memberLoginValidator } = require("../validators/memberLoginValidator");
 
 const bcrypt = require("bcrypt");
@@ -44,53 +46,97 @@ async function getMemberById(req, res) {
 //creating a member
 async function createMember(req, res) {
   try {
-    
-  
-  let create_member = req.body;
-    // let value  = createMemberValidator(create_member);
-    let value = req;
-    console.log(value)
-  let { Name, Address, ContactNumber, Password } = create_member;
-  let sql = await mssql.connect(config);
-  let hashed_password = await bcrypt.hash(Password, 8);
-  if (sql.connected) {
-    let checkQuery = `SELECT * FROM library.Members WHERE Name = '${Name}'`;
-    let checkResult = await sql.query(checkQuery);
+    let create_member = req.body;
+    let value = createMemberValidator(create_member);
 
-    if (checkResult.recordset.length > 0) {
-      // User already exists
-      res.status(409).json({
-        success: false,
-        message: "User already exists",
-      });
+    console.log(value);
+    let { Name, Address, ContactNumber, Email, Password } = create_member;
+    let sql = await mssql.connect(config);
+    let hashed_password = await bcrypt.hash(Password, 8);
+    if (sql.connected) {
+      let checkQuery = `SELECT * FROM library.Members WHERE Name = '${Name}'`;
+      let checkResult = await sql.query(checkQuery);
+
+      if (checkResult.recordset.length > 0) {
+        // User already exists
+        res.status(409).json({
+          success: false,
+          message: "User already exists",
+        });
+      } else {
+        let result = await sql
+          .request()
+          .input("Name", Name)
+          .input("Address", Address)
+          .input("ContactNumber", ContactNumber)
+          .input("Email", Email)
+          .input("Password", hashed_password)
+          .execute("library.Createuser");
+        res.send(result.recordsets);
+        //   json({
+        //     success: true,
+        //     message: "Member created successfully",
+        //     results: result,
+        //   });
+      }
     } else {
-      let result = await sql
-        .request()
-        .input("Name", Name)
-        .input("Address", Address)
-        .input("ContactNumber", ContactNumber)
-        .input("Password", hashed_password)
-        .execute("library.CreateMember");
-      res.send(result);
-      //   json({
-      //     success: true,
-      //     message: "Member created successfully",
-      //     results: result,
-      //   });
+      res.status(500).send("Internal server error");
     }
-  } else {
-    res.status(500).send("Internal server error");
+  } catch (error) {
+    res.send(error.message);
+    console.log(error.message);
   }
-} catch (error) {
-    res.send(error.message)
-    console.log(error.message)
 }
+
+//Creating an admin
+
+async function createAdmin(req, res) {
+  try {
+    let create_member = req.body;
+    let value = createMemberValidator(create_member);
+    console.log(value);
+    let { Name, Address, ContactNumber, Email, Password } = create_member;
+    let sql = await mssql.connect(config);
+    let hashed_password = await bcrypt.hash(Password, 8);
+    if (sql.connected) {
+      let checkQuery = `SELECT * FROM library.Members WHERE Name = '${Name}'`;
+      let checkResult = await sql.query(checkQuery);
+
+      if (checkResult.recordset.length > 0) {
+        // User already exists
+        res.status(409).json({
+          success: false,
+          message: "User already exists",
+        });
+      } else {
+        let result = await sql
+          .request()
+          .input("Name", Name)
+          .input("Address", Address)
+          .input("ContactNumber", ContactNumber)
+          .input("Email", Email)
+          .input("Password", hashed_password)
+          .execute("library.CreateAdmin");
+        res.send(result.recordsets);
+        //   json({
+        //     success: true,
+        //     message: "Member created successfully",
+        //     results: result,
+        //   });
+      }
+    } else {
+      res.status(500).send("Internal server error");
+    }
+  } catch (error) {
+    res.send(error.message);
+    console.log(error.message);
+  }
 }
 
 async function memberLogin(req, res) {
   let { MemberID, Password } = req.body;
-  let value  = memberLoginValidator(req.body);
-    console.log(value)
+  let value = memberLoginValidator(req.body);
+  console.log(value);
   try {
     let member = await getAMember(MemberID);
     if (member) {
@@ -103,13 +149,20 @@ async function memberLogin(req, res) {
         console.log(token);
         res.json({ success: true, message: "Logged in Successfully", token });
       } else {
-        res.status(401).json({ success: false, message: "Wrong credentials: Please recheck your details and try again" });
+        res.status(401).json({
+          success: false,
+          message:
+            "Wrong credentials: Please recheck your details and try again",
+        });
       }
     } else {
-      res.status(401).json({ success: false, Message: "No user found: Create an account first" });
+      res.status(401).json({
+        success: false,
+        Message: "No user found: Create an account first",
+      });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
@@ -155,4 +208,10 @@ async function memberLogin(req, res) {
 //   }
 // }
 
-module.exports = { getmembers, getMemberById, createMember, memberLogin };
+module.exports = {
+  getmembers,
+  getMemberById,
+  createMember,
+  memberLogin,
+  createAdmin,
+};
