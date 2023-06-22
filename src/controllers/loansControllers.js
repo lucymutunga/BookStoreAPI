@@ -36,7 +36,7 @@ async function borrowBooks(req, res) {
       if (memberCheck.recordset.length === 0) {
         res.json({
           success: false,
-          message: "Please register with the library to bollow a book.",
+          message: "Please register with the library in order to borrow a book.",
         });
       } else {
         let result = await sql

@@ -7,7 +7,7 @@ const createMemberSchema = joi.object({
     Address: joi.string().required().min(3).max(30),
     ContactNumber: joi.string().required().min(8).max(8),
     Password: joi.string().required().min(8).max(30),
-    //c_password: joi.ref('Password')
+    Email: joi.string().required()
 });
 
 module.exports = { createMemberSchema };

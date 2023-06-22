@@ -2,6 +2,7 @@ const mssql = require("mssql");
 const config = require("../config/config.js");
 const { createMemberValidator } = require("../validators/createMemberValidation");
 const { memberLoginValidator } = require("../validators/memberLoginValidator");
+const {sendMail}=require("../utils/sendMail")
 
 const bcrypt = require("bcrypt");
 const getAMember = require("../utils/getAMember.js");
@@ -41,16 +42,15 @@ async function getMemberById(req, res) {
     res.status(500).send("Internal server error");
   }
 }
-//creating a member
+
 async function createMember(req, res) {
   try {
     
-  
-  let create_member = req.body;
-    // let value  = createMemberValidator(create_member);
-    let value = req;
+let create_member = req.body;
+    let value  = createMemberValidator(create_member);
+    // let value = req;
     console.log(value)
-  let { Name, Address, ContactNumber, Password } = create_member;
+  let { Name, Address, ContactNumber, Password,Email } = create_member;
   let sql = await mssql.connect(config);
   let hashed_password = await bcrypt.hash(Password, 8);
   if (sql.connected) {
@@ -70,13 +70,18 @@ async function createMember(req, res) {
         .input("Address", Address)
         .input("ContactNumber", ContactNumber)
         .input("Password", hashed_password)
+        .input("Email",Email)
         .execute("library.CreateMember");
-      res.send(result);
-      //   json({
-      //     success: true,
-      //     message: "Member created successfully",
-      //     results: result,
-      //   });
+       try {
+        await sendMail(Email, Name);
+      } catch(err) {
+        console.log(err);
+      }
+      res.json({
+        success: true,
+        message: "Member created successfully",
+        results: result.recordsets[0]
+      });
     }
   } else {
     res.status(500).send("Internal server error");
@@ -86,6 +91,25 @@ async function createMember(req, res) {
     console.log(error.message)
 }
 }
+
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// },
+
+
+
+//     }
+//   } else {
+//     res.status(500).send("Internal server error");
+//   }
+
+// } catch (error) {
+//     res.send(error.message)
+//     console.log(error.message)
+// }
+// }
 
 async function memberLogin(req, res) {
   let { MemberID, Password } = req.body;
