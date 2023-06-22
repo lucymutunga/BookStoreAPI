@@ -72,12 +72,13 @@ async function createMember(req, res) {
           .input("Email", Email)
           .input("Password", hashed_password)
           .execute("library.Createuser");
-        res.send(result.recordsets);
-        //   json({
-        //     success: true,
-        //     message: "Member created successfully",
-        //     results: result,
-        //   });
+        res.json({
+          success: true,
+          message:
+            "Member created successfully Navigate to the login path and  Use your generated MemberID and password to login ",
+          results: result.recordsets,
+          // send(result.recordsets);
+        });
       }
     } else {
       res.status(500).send("Internal server error");

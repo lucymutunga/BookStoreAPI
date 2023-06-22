@@ -2,16 +2,15 @@ const { tokenVerifier } = require("../utils/tokens");
 const config = require("../config/config");
 let mssql = require("mssql");
 async function adminTokenValidation(req, res, next) {
-  let token = req.headers["authorization"].split(" ")[1];
+  let token = req.headers["authorization"]?.split(" ")[1];
   try {
     if (!token)
       return next({ status: 400, message: "Provide a token to proceed" });
 
     let member = await tokenVerifier(token);
 
-    // Make a database query to retrieve the member's role based on their ID
     let sql = await mssql.connect(config);
-    // let pool = await mssql.connect();
+
     let result = await sql
       .request()
       .input("MemberID", member.MemberID)

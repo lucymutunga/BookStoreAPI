@@ -7,7 +7,8 @@ const {
 } = require("../controllers/booksController");
 const adminTokenValidation = require("../Middlewares/adminMemberMiddleware");
 const tokenval = require("../Middlewares/tokenval");
-booksrouter.get("/", getAllBooks);
-booksrouter.get("/:book_id", adminTokenValidation, tokenval, getBookById);
+
+booksrouter.get("/", tokenval, getAllBooks);
+booksrouter.get("/:book_id", tokenval, getBookById);
 booksrouter.post("/add", adminTokenValidation, createBook);
 module.exports = booksrouter;

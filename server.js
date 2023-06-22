@@ -3,7 +3,7 @@ require("dotenv").config();
 const booksrouter = require("./src/routes/booksRoute");
 const loansrouter = require("./src/routes/loansRoute");
 const membersrouter = require("./src/routes/membersRoutes.js");
-const { adminTokenValidation } = require("./src/Middlewares/tokenval");
+// const { adminTokenValidation } = require("./src/Middlewares/tokenval");
 const app = express();
 
 app.use(express.json());
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
   });
 });
 app.use((error, req, res, next) => {
-  console.log("Error!invalid token on middleware");
+  // console.log("Error!invalid token on middleware");
   res.status(error.status).json(error.message);
 });
 const port = process.env.PORT || 3030;

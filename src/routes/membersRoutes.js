@@ -9,7 +9,8 @@ const {
   createAdmin,
 } = require("../controllers/membercontroller");
 const adminTokenValidation = require("../Middlewares/adminMemberMiddleware");
-const tokenval = require("../Middlewares/adminMemberMiddleware");
+// const tokenval = require("../Middlewares/adminMemberMiddleware");
+
 membersrouter.get("/", adminTokenValidation, getmembers);
 membersrouter.get("/:MemberID", adminTokenValidation, getMemberById);
 membersrouter.post("/", createMember);
