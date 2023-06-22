@@ -72,11 +72,6 @@ async function createMember(req, res) {
         .input("Password", hashed_password)
         .execute("library.CreateMember");
       res.send(result);
-      //   json({
-      //     success: true,
-      //     message: "Member created successfully",
-      //     results: result,
-      //   });
     }
   } else {
     res.status(500).send("Internal server error");
