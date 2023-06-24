@@ -5,8 +5,6 @@ const {sendMail} = require("../utils/returnsendMail");
 
 const { newBorrowValidator } = require("../validators/borrowBookValidators");
 const { newReturnValidator } = require("../validators/returnBookValidation");
-
-const { sendBorrowMail } = require("../utils/borrowMail");
 const { sendBorrowMail } = require("../utils/borrowMail");
 async function getAllLoans(req, res) {
   let sql = await mssql.connect(config);
