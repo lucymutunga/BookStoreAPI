@@ -6,12 +6,15 @@ const {
   getMemberById,
   createMember,
   memberLogin,
+  createAdmin,
 } = require("../controllers/membercontroller");
-const newMemberMiddleware = require("../Middlewares/newMemberMiddleware");
-membersrouter.get("/", getmembers);
-membersrouter.get("/:MemberID", getMemberById);
-membersrouter.post("/",newMemberMiddleware,createMember);
-membersrouter.post("/login",memberLogin)
+const adminTokenValidation = require("../Middlewares/adminMemberMiddleware");
+// const tokenval = require("../Middlewares/adminMemberMiddleware");
 
+membersrouter.get("/", adminTokenValidation, getmembers);
+membersrouter.get("/:MemberID", adminTokenValidation, getMemberById);
+membersrouter.post("/", createMember);
+membersrouter.post("/admin", createAdmin);
+membersrouter.post("/login", memberLogin);
 
 module.exports=membersrouter;

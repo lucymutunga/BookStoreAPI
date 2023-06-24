@@ -7,13 +7,27 @@ Author VARCHAR(255) NOT NULL,
 PublicationYear VARCHAR(255) NOT NULL,
 Status VARCHAR(255) NOT NULL);
 
-CREATE TABLE library.Members(
-MemberID INT IDENTITY(1,1) PRIMARY KEY,
-Name VARCHAR(255) NOT NULL,
+--CREATE TABLE library.Members(
+--MemberID INT IDENTITY(1,1) PRIMARY KEY,
+--Name VARCHAR(255) NOT NULL,
+--Address VARCHAR (255) NOT NULL,
+--ContactNumber VARCHAR (20) NOT NULL,
+--Password VARCHAR(250) NOT NULL
+--);
 
-Address VARCHAR (255) NOT NULL,
-ContactNumber VARCHAR (20) NOT NULL
+select * from library.Members
+
+CREATE TABLE library.Members (
+  MemberID INT IDENTITY(1,1) PRIMARY KEY,
+  Name VARCHAR(255) NOT NULL,
+  Address VARCHAR(255) NOT NULL,
+  ContactNumber VARCHAR(20) NOT NULL,
+  Email VARCHAR(255) NOT NULL,
+  Password VARCHAR(255) NOT NULL,
+  Role VARCHAR(20) NOT NULL
 );
+
+
  
 CREATE TABLE library.Loans(
 LoanID INT IDENTITY(1,1) PRIMARY KEY,
@@ -24,18 +38,6 @@ ReturnDate DATE
 );
 
 
--- Inserting data into the database
-INSERT INTO library.Members (MemberID, Name, Address, ContactNumber) VALUES
-( 'John Smith', '123 Main St, Cityville', '555-1234'),
-( 'Emily Johnson', '456 Elm St, Townville', '555-5678'),
-( 'Michael Williams', '789 Oak St, Villagetown', '555-9012'),
-( 'Sophia Brown', '321 Pine St, Hamletville', '555-3456'),
-( 'Daniel Taylor', '654 Maple St, Countryside', '555-7890'),
-( 'Olivia Martinez', '987 Cedar St, Hillside', '555-1234'),
-( 'James Davis', '741 Birch St, Riverside', '555-5678'),
-( 'Emma Garcia', '852 Walnut St, Lakeside', '555-9012'),
-( 'Benjamin Rodriguez', '369 Willow St, Mountainview', '555-3456'),
-( 'Ava Wilson', '951 Cherry St, Beachside', '555-7890')
 
 INSERT INTO library.Books ( Title, Author, PublicationYear, Status) VALUES
 ( 'To Kill a Mockingbird', 'Harper Lee', '1960', 'Available'),
@@ -58,5 +60,3 @@ INSERT INTO library.Books ( Title, Author, PublicationYear, Status) VALUES
 ( 'The Giver', 'Lois Lowry', '1993', 'Available'),
 ( 'The Kite Runner', 'Khaled Hosseini', '2003', 'Available'),
 ( 'The Catcher in the Rye', 'J.D. Salinger', '1951', 'Available')
-
-select * from library.Books

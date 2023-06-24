@@ -1,4 +1,3 @@
-const express = require("express");
 const mssql = require("mssql");
 const config = require("../config/config");
 
@@ -7,6 +6,7 @@ const {sendMail} = require("../utils/returnsendMail");
 const { newBorrowValidator } = require("../validators/borrowBookValidators");
 const { newReturnValidator } = require("../validators/returnBookValidation");
 
+const { sendBorrowMail } = require("../utils/borrowMail");
 async function getAllLoans(req, res) {
   let sql = await mssql.connect(config);
   if (sql.connected) {
@@ -23,6 +23,8 @@ async function getAllLoans(req, res) {
 //Borrowing Books Method
 
 async function borrowBooks(req, res) {
+  const Email = `lucyalphonce18@gmail.com`;
+
   let borrow = req.body;
   let { MemberName, BookTitle } = borrow;
 
@@ -49,22 +51,23 @@ async function borrowBooks(req, res) {
           .input("BookTitle", BookTitle)
           .execute("library.BorrowBooks");
 
-        res.json({
-          success: true,
-          message: "Successfully borrowed a book.",
-          Book: result.recordsets,
-        });
+        if (
+          res.json({
+            success: true,
+            message: "Successfully borrowed a book.",
+            Book: result.recordsets[0],
+          })
+        ) {
+          try {
+            await sendBorrowMail(Email, MemberName);
+          } catch (err) {
+            console.log(err);
+          }
+        }
       }
     }
   } catch (error) {
-    // console.error("Error:", error);
-    res
-      .status(500)
-      // .json({
-      //   Message: "An error occurred while borrowing the book.",
-      //   error: error.message,
-      // });
-      .send(error.message);
+    res.status(500).send(error.message);
   }
 }
 
