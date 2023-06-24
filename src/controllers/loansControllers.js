@@ -1,8 +1,12 @@
 const express = require("express");
 const mssql = require("mssql");
 const config = require("../config/config");
+
+const {sendMail} = require("../utils/returnsendMail");
+
 const { newBorrowValidator } = require("../validators/borrowBookValidators");
 const { newReturnValidator } = require("../validators/returnBookValidation");
+
 async function getAllLoans(req, res) {
   let sql = await mssql.connect(config);
   if (sql.connected) {
@@ -108,11 +112,18 @@ async function returnBooks(req, res) {
             .input("MemberName", MemberName)
             .input("BookTitle", BookTitle)
             .execute("library.ReturnBook");
-
+           // calling email function
+         try{
+          await returnsendMail( Email,Name);
+         }catch(error){
+            console.log(err);
+          }
+          
           res.json({
+
             success: true,
             message: "Successfully returned the book.",
-            Book: result.recordsets,
+            Book: result.recordsets[0],
           });
         }
       }
@@ -121,8 +132,12 @@ async function returnBooks(req, res) {
     // console.error("Error:", error);
     res.status(500).send({ error: error.message });
     // .json({ error: "An error occurred while returning the book." });
+  
   }
 }
+
+
+
 
 //\list of members who have borrwed a book
 
