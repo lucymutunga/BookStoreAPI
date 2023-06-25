@@ -1,5 +1,6 @@
 const mssql = require("mssql");
 const config = require("../config/config");
+const cron = require("node-cron");
 
 const {sendMail} = require("../utils/returnsendMail");
 
@@ -116,7 +117,7 @@ async function returnBooks(req, res) {
             .execute("library.ReturnBook");
            // calling email function
          try{
-          await returnsendMail( Email,Name);
+          await returnsendMail( Email,Name,BookTitle);
          }catch(error){
             console.log(err);
           }
@@ -137,6 +138,35 @@ async function returnBooks(req, res) {
   
   }
 }
+
+// Cron job to send email notifications for due books
+cron.schedule('0 0 * * *', async () => {
+  try {
+    let sql = await mssql.connect(config);
+    if (sql.connected) {
+      const currentDate = new Date();
+      const dueDate = new Date();
+      dueDate.setDate(currentDate.getDate() - 7); // Assuming due date is 7 days from the loan date
+
+      const dueBooks = await sql
+        .request()
+        .input("DueDate", dueDate)
+        .query(
+          "SELECT * FROM library.Loans L JOIN library.Books B ON L.BookID = B.BookID JOIN library.Members M ON L.MemberID = M.MemberID WHERE L.ReturnDate IS NULL AND L.LoanDate < @DueDate"
+        );
+
+      for (const book of dueBooks.recordset) {
+        // Send email notification for each due book
+        await sendMail(book.Email, book.Name, book.Title);
+      }
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+});
+
+
+
 
 
 
