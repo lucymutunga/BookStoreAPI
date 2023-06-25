@@ -7,6 +7,8 @@ const membersrouter = require("./src/routes/membersRoutes.js");
 const app = express();
 
 app.use(express.json());
+// "/Images/booksImages",
+app.use("/books/Images//booksImages/", express.static("Images/booksImages"));
 //applying middleware at root level
 app.get(
   "/",
