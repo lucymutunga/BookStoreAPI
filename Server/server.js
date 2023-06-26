@@ -1,10 +1,12 @@
 const express = require("express");
 require("dotenv").config();
+const cors = require("cors");
 const booksrouter = require("./src/routes/booksRoute");
 const loansrouter = require("./src/routes/loansRoute");
 const membersrouter = require("./src/routes/membersRoutes.js");
 // const { adminTokenValidation } = require("./src/Middlewares/tokenval");
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 // "/Images/booksImages",

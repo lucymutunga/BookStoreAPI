@@ -1,0 +1,23 @@
+.navBar p {
+  text-align: center;
+  color: white;
+  margin-top: 0;
+  background-color: black;
+  padding: 2px;
+}
+.nav-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-links {
+  display: flex;
+  list-style-type: none;
+  /* visibility: hidden; */
+}
+.link-style {
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+  gap: 20px;
+}
