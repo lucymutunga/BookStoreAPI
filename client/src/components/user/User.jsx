@@ -1,16 +1,15 @@
 import React from "react";
-import Navbar from "../HomePage/Navbar";
+
 import { Link, Outlet } from "react-router-dom";
 import "../HomePage/home.css";
 
 const User = () => {
   return (
-    <div>
-      <div>
-        <Navbar />
-      </div>
-      <div>
-        <ul className="nav-links">
+    <div className="navBar">
+      <p>Welcome to our bookStore</p>
+      <div className="useritems">
+        <img src="../../assets/images/logo.jpg" alt="img" />
+        <ul className="homeItems">
           <Link className="link-style" to="/user/borrowbooks">
             <li>Borrow Books</li>
           </Link>

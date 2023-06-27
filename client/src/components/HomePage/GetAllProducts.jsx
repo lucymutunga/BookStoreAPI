@@ -3,7 +3,7 @@ import Axios from "axios";
 
 const GetAllProducts = () => {
   let token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNZW1iZXJJRCI6MTAwNCwicm9sZXMiOiJhZG1pbiIsImlhdCI6MTY4NzgwMjE1MywiZXhwIjoxNjg3ODA1NzUzfQ.U9cNaiPXFgZiy5p44vrUjv4Dzpj-viV0vIVUfZHBjVk";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNZW1iZXJJRCI6Mywicm9sZXMiOiJhZG1pbiIsImlhdCI6MTY4Nzg2MzczNCwiZXhwIjoxNjg3ODY3MzM0fQ.V1mc2yV40FPysey4PsSMe3kWS2-PSkbMEpNv8KjK2Xg";
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const GetAllProducts = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBooks(response.data.results);
-        // console.log(response.data.results);
+        console.log(response.data.results);
       } catch (error) {
         console.error(error);
       }
