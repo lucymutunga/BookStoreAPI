@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 });
 app.use((error, req, res, next) => {
   // console.log("Error!invalid token on middleware");
-  res.status(error.status).json(error.message);
+  res.status(404).json(error.message);
 });
 const port = process.env.PORT || 3030;
 app.listen(port, () => console.log(`Server running on port ${port}`));
