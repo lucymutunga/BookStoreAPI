@@ -80,9 +80,9 @@ const Signup = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </form>
-            <button className="btn" type="submit">
+           <Link to="/login"><button className="btn" type="submit">
               Signup
-            </button>
+            </button></Link> 
             <p>
               Already have an account? <Link to="/login">Sign in</Link>
             </p>

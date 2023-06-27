@@ -4,6 +4,7 @@
   margin-top: 0;
   background-color: black;
   padding: 2px;
+  width:100%;
 }
 .nav-items {
   display: flex;
@@ -17,7 +18,46 @@
 }
 .link-style {
   text-decoration: none;
+  list-style-type: none;
   color: black;
   font-size: 15px;
   gap: 20px;
+}
+.link-style li {
+  margin-left: 40px;
+  margin-right: 10px;
+}
+.width {
+  margin-left: 100px;
+}
+.homeitems {
+  margin-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+.homeitems ul {
+  width: fit-content;
+  margin-left: 700px;
+  display: flex;
+}
+.homeItems{
+  display: flex;
+  justify-content: flex-end;
+
+}
+.useritems {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+}
+.useritems ul {
+  margin-left: 1400px;
+}
+
+.homeItems {
+  display: flex;
+  justify-content: flex-end;
+  
 }

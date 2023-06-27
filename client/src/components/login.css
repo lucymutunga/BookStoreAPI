@@ -17,12 +17,12 @@
   --text: #fff;
   --accent: #ff9800;
 }
-
+/* 
 body {
   background-color: maroon;
   color: var(--text);
   font-family: "Roboto", sans-serif;
-}
+} */
 .overlay {
   position: absolute;
   width: 100%;
@@ -38,7 +38,7 @@ body {
   grid-template-columns: repeat(2, 1fr);
 }
 .left-side {
-  background: url("/src/assets/girl.jpg") no-repeat center center/cover;
+  background: url("/src/assets/images/girl.jpg") no-repeat center center/cover;
   display: flex;
   flex-direction: column;
   justify-content: center;

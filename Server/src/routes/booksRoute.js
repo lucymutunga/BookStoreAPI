@@ -28,10 +28,5 @@ const multerFilter = (req, file, cb) => {
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 booksrouter.get("/", tokenval, getAllBooks);
 booksrouter.get("/:book_id", tokenval, getBookById);
-booksrouter.post(
-  "/add",
-  upload.single("img"),
-  adminTokenValidation,
-  createBook
-);
+booksrouter.post("/add", adminTokenValidation, createBook);
 module.exports = booksrouter;
